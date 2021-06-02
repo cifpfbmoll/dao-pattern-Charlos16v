@@ -36,11 +36,11 @@ public class FruitResource {
 
     @DELETE
     @Transactional
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/{fruitname}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteData(@Valid Fruit fruit) {
-        service.removeFruit(fruit.getName());
-        return Response.accepted(fruit).build();
+    public Response deleteData(@PathParam("fruitname") String fruitname) {
+        service.removeFruit(fruitname);
+        return Response.accepted(fruitname).build();
     }
 
     @GET
