@@ -33,7 +33,7 @@ public class FruitResourceTest {
 
         Assertions.assertThat(fruits).hasSize(2);
 
-        Collections.sort(fruits, Comparator.comparing(map -> (String) map.get("name")));
+        fruits.sort(Comparator.comparing(map -> (String) map.get("name")));
 
         Assertions.assertThat(fruits.get(0)).containsValue("Orange");
         Assertions.assertThat(fruits.get(0)).containsEntry("description", "Summer fruit");
