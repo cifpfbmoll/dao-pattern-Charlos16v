@@ -1,5 +1,8 @@
-package edu.pingpong.active.record;
+package edu.pingpong.active.record.resource;
 
+
+import edu.pingpong.active.record.service.FruitService;
+import edu.pingpong.active.record.entity.Fruit;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;

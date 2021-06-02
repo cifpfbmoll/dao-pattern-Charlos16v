@@ -1,5 +1,7 @@
 package edu.pingpong.active.record;
 
+import edu.pingpong.active.record.entity.Fruit;
+import edu.pingpong.active.record.service.FruitService;
 import io.quarkus.test.junit.QuarkusTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

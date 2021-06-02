@@ -1,5 +1,6 @@
-package edu.pingpong.active.record;
+package edu.pingpong.active.record.repository;
 
+import edu.pingpong.active.record.entity.Fruit;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import io.quarkus.panache.common.Sort;
 

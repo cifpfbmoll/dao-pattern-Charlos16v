@@ -1,12 +1,12 @@
-package edu.pingpong.active.record;
+package edu.pingpong.active.record.service;
+
+import edu.pingpong.active.record.entity.Fruit;
+import edu.pingpong.active.record.repository.FruitRepository;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 // Single bean instance
 @ApplicationScoped

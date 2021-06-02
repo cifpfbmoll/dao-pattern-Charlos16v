@@ -1,4 +1,4 @@
-package edu.pingpong.active.record;
+package edu.pingpong.active.record.entity;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;

@@ -67,13 +67,11 @@ public class FruitResourceTest {
                 .body("name", equalTo("Kiwi"));
 
         given()
-                .body("{\"name\": \"Kiwi\", \"description\": \"nice\"}")
-                .header("Content-Type", MediaType.APPLICATION_JSON)
                 .when()
-                .delete("/fruits")
+                .delete("/fruits/"+"Kiwi")
                 .then()
                 .statusCode(202)
-                .body("name", equalTo("Kiwi"));
+                .body(equalTo("Kiwi"));
     }
 
 
