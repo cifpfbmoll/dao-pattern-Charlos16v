@@ -43,7 +43,7 @@ public class FruitResource {
     public Response addData(@Valid Fruit fruit) {
         service.addFruit(fruit);
         return Response.status(Response.Status.OK)
-                .entity(new MessagedResponse("Added " + fruit.name + " fruit."))
+                .entity(new MessagedResponse("Added " + fruit.name + " fruit succesfully."))
                 .build();
     }
 
