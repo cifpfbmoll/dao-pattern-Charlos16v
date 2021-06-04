@@ -3,6 +3,8 @@ package edu.pingpong.active.record.resource;
 
 import edu.pingpong.active.record.service.FruitService;
 import edu.pingpong.active.record.entity.Fruit;
+import edu.pingpong.active.record.util.FruitsResponse;
+import edu.pingpong.active.record.util.MessagedResponse;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -25,7 +27,10 @@ public class FruitResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response fruitsData() {
-        return Response.ok(service.getData(), MediaType.APPLICATION_JSON).build();
+        return Response.status(Response.Status.OK).entity(
+                new FruitsResponse(service.getData())).build();
+
+        //return Response.ok(service.getData(), MediaType.APPLICATION_JSON).build();
     }
 
     @POST
@@ -34,7 +39,9 @@ public class FruitResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response addData(@Valid Fruit fruit) {
         service.addFruit(fruit);
-        return Response.accepted(fruit).build();
+        return Response.status(Response.Status.OK)
+                .entity(new MessagedResponse("Added " + fruit.name + " fruit."))
+                .build();
     }
 
     @DELETE
@@ -42,6 +49,10 @@ public class FruitResource {
     @Path("/{fruitname}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteData(@PathParam("fruitname") String fruitname) {
+        Optional<Fruit> fruit = service.getFruit(fruitname);
+        if (fruit.isEmpty()) return Response.status(Response.Status.NOT_FOUND)
+                .entity(new MessagedResponse("The fruit with name " + fruitname + " doesn't exist."))
+                .build();
         service.removeFruit(fruitname);
         return Response.accepted(fruitname).build();
     }
@@ -51,6 +62,9 @@ public class FruitResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getData(@PathParam("fruitname") String fruitname) {
         Optional<Fruit> fruit = service.getFruit(fruitname);
-        return fruit.isPresent() ? Response.ok(fruit).build() : Response.status(Response.Status.NOT_FOUND).entity("The fruit with name " + fruitname + " doesn't exist.").build();
+        return fruit.isPresent() ? Response.ok(fruit).build() :
+                Response.status(Response.Status.NOT_FOUND)
+                        .entity(new MessagedResponse("The fruit with name " + fruitname + " doesn't exist."))
+                        .build();
     }
 }
