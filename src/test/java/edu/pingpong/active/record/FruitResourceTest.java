@@ -17,6 +17,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasSize;
 
 @QuarkusTest
 @Transactional
@@ -24,22 +25,24 @@ public class FruitResourceTest {
 
     @Test
     public void fruitsDataEndpoint() {
-        List<Map<String, Object>> fruits =
+        Map<String,List<Map<String, Object>>> fruits =
                 given()
                         .contentType(ContentType.JSON)
                         .when().get("/fruits")
-                        .as(new TypeRef<List<Map<String, Object>>>() {
+                        .as(new TypeRef<Map<String, List<Map<String, Object>>>>() {
                         });
 
-        Assertions.assertThat(fruits).hasSize(2);
+        List<Map<String, Object>> fruitsList = fruits.get("fruits");
 
-        fruits.sort(Comparator.comparing(map -> (String) map.get("name")));
+        Assertions.assertThat(fruitsList).hasSize(2);
 
-        Assertions.assertThat(fruits.get(0)).containsValue("Orange");
-        Assertions.assertThat(fruits.get(0)).containsEntry("description", "Summer fruit");
+        fruits.get("fruits").sort(Comparator.comparing(map -> (String) map.get("name")));
 
-        Assertions.assertThat(fruits.get(1)).containsValue("Strawberry");
-        Assertions.assertThat(fruits.get(1)).containsEntry("description", "Winter fruit");
+        Assertions.assertThat(fruitsList.get(0)).containsValue("Orange");
+        Assertions.assertThat(fruitsList.get(0)).containsEntry("description", "Summer fruit");
+
+        Assertions.assertThat(fruitsList.get(1)).containsValue("Strawberry");
+        Assertions.assertThat(fruitsList.get(1)).containsEntry("description", "Winter fruit");
     }
 
     @Test
@@ -50,9 +53,9 @@ public class FruitResourceTest {
                 .get("/fruits")
                 .then()
                 .statusCode(200)
-                .body("$.size()", is(2),
-                        "name", containsInAnyOrder("Strawberry", "Orange"),
-                        "description", containsInAnyOrder("Winter fruit", "Summer fruit"));
+                .body("fruits", hasSize(2),
+                        "fruits.name", containsInAnyOrder("Strawberry", "Orange"),
+                        "fruits.description", containsInAnyOrder("Winter fruit", "Summer fruit"));
     }
 
     @Test
@@ -63,15 +66,15 @@ public class FruitResourceTest {
                 .when()
                 .post("/fruits")
                 .then()
-                .statusCode(202)
-                .body("name", equalTo("Kiwi"));
+                .statusCode(200)
+                .body("message", equalTo("Added Kiwi fruit."));
 
         given()
                 .when()
                 .delete("/fruits/"+"Kiwi")
                 .then()
-                .statusCode(202)
-                .body(equalTo("Kiwi"));
+                .statusCode(200)
+                .body("message", equalTo("Deleted Kiwi fruit succesfully."));
     }
 
 
@@ -92,6 +95,6 @@ public class FruitResourceTest {
                 .then()
                 .contentType(ContentType.JSON)
                 .statusCode(404)
-                .body(equalTo("The fruit with name Papaya doesn't exist."));
+                .body("message", equalTo("The fruit with name Papaya doesn't exist."));
     }
 }
