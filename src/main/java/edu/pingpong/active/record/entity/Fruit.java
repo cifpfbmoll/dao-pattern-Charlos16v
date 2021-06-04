@@ -43,4 +43,13 @@ public class Fruit extends PanacheEntityBase {
     public String getName() {
         return this.name;
     }
+
+    @Override
+    public String toString() {
+        return "Fruit{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }
