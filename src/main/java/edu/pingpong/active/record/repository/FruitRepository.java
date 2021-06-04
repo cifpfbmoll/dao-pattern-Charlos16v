@@ -23,6 +23,10 @@ public class FruitRepository implements PanacheRepositoryBase<Fruit, Integer> {
         this.persist(fruit);
     }
 
+    public void updateFruit(Optional<Fruit> fruitToUpdate, Fruit newFruit){
+        fruitToUpdate.ifPresent(f -> f.setNameAndDescription(newFruit.name, newFruit.description));
+    }
+
     public void removeFruitByName(String name) {
         Optional<Fruit> fruit = this.getFruitByName(name);
         fruit.ifPresent(this::delete);

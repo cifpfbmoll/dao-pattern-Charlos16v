@@ -32,6 +32,10 @@ public class FruitService {
         repository.addFruit(fruit);
     }
 
+    public void updateFruit(Optional<Fruit> fruitToUpdate, Fruit newFruit) {
+        repository.updateFruit(fruitToUpdate, newFruit);
+    }
+
     public void removeFruit(String name) {
         repository.removeFruitByName(name);
     }

@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.Optional;
 
 @Path("/fruits")
@@ -27,10 +28,12 @@ public class FruitResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response fruitsData() {
+        List<Fruit> data = service.getData();
+        if (data.isEmpty()) return Response.status(Response.Status.NOT_FOUND)
+                .entity(new MessagedResponse("The fruit storage is without fruits!"))
+                .build();
         return Response.status(Response.Status.OK).entity(
                 new FruitsResponse(service.getData())).build();
-
-        //return Response.ok(service.getData(), MediaType.APPLICATION_JSON).build();
     }
 
     @POST
@@ -41,6 +44,22 @@ public class FruitResource {
         service.addFruit(fruit);
         return Response.status(Response.Status.OK)
                 .entity(new MessagedResponse("Added " + fruit.name + " fruit."))
+                .build();
+    }
+
+    @PUT
+    @Path("/{fruitname}")
+    @Transactional
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateData(@PathParam("fruitname") String fruitname, Fruit newFruit) {
+        Optional<Fruit> fruitToUpdate = service.getFruit(fruitname);
+        if (fruitToUpdate.isEmpty()) return Response.status(Response.Status.NOT_FOUND)
+                .entity(new MessagedResponse("The fruit with name " + fruitname + " doesn't exist."))
+                .build();
+        service.updateFruit(fruitToUpdate, newFruit);
+        return Response.status(Response.Status.OK)
+                .entity(new MessagedResponse("Updated " + fruitname + " fruit succesfully."))
                 .build();
     }
 
