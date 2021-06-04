@@ -54,7 +54,9 @@ public class FruitResource {
                 .entity(new MessagedResponse("The fruit with name " + fruitname + " doesn't exist."))
                 .build();
         service.removeFruit(fruitname);
-        return Response.accepted(fruitname).build();
+        return Response.status(Response.Status.OK)
+                .entity(new MessagedResponse("Deleted " + fruitname + " fruit succesfully."))
+                .build();
     }
 
     @GET
