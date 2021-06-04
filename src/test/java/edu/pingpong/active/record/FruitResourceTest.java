@@ -67,14 +67,20 @@ public class FruitResourceTest {
                 .post("/fruits")
                 .then()
                 .statusCode(200)
-                .body("message", equalTo("Added Kiwi fruit."));
+                .body("message", equalTo("Added Kiwi fruit succesfully."));
 
         given()
+                .pathParam("fruitname", "Kiwi")
                 .when()
-                .delete("/fruits/"+"Kiwi")
+                .delete("/fruits/{fruitname}")
                 .then()
                 .statusCode(200)
                 .body("message", equalTo("Deleted Kiwi fruit succesfully."));
+    }
+
+    @Test
+    public void udpateFruitTest() {
+
     }
 
 
