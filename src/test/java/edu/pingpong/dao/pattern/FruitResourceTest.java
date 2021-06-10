@@ -44,7 +44,7 @@ public class FruitResourceTest {
         Assertions.assertThat(fruitsList.get(1)).containsValue("Orange");
         Assertions.assertThat(fruitsList.get(1)).containsEntry("description", "Summer fruit");
     }
-    /*
+
     @Test
     public void fruitsDataTransactionTest() {
         given()
@@ -54,14 +54,21 @@ public class FruitResourceTest {
                 .then()
                 .statusCode(200)
                 .body("fruits", hasSize(2),
-                        "fruits.name", containsInAnyOrder("Strawberry", "Orange"),
-                        "fruits.description", containsInAnyOrder("Winter fruit", "Summer fruit"));
+                        "fruits.name", containsInAnyOrder("Avocado", "Orange"),
+                        "fruits.description", containsInAnyOrder("Gold", "Summer fruit"),
+                        "fruits.farmer.name", containsInAnyOrder("Aguila", "Farmer Master"));
     }
 
     @Test
     public void addDeleteFruitTest() {
         given()
-                .body("{\"name\": \"Kiwi\", \"description\": \"nice\"}")
+                .body("{\n" +
+                        "    \"name\": \"Kiwi\",\n" +
+                        "    \"description\": \"nice\",\n" +
+                        "    \"farmer\": {\n" +
+                        "        \"name\": \"Aguila\"\n" +
+                        "    }\n" +
+                        "}")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .when()
                 .post("/fruits")
@@ -87,12 +94,12 @@ public class FruitResourceTest {
     @Test
     public void getFruitTest() {
         given()
-                .pathParam("name", "Orange")
+                .pathParam("name", "Avocado")
                 .when()
                 .get("/fruits/{name}")
                 .then()
                 .contentType(ContentType.JSON)
-                .body("name", equalTo("Orange"));
+                .body("name", equalTo("Avocado"));
 
         given()
                 .pathParam("name", "Papaya")
@@ -102,5 +109,5 @@ public class FruitResourceTest {
                 .contentType(ContentType.JSON)
                 .statusCode(404)
                 .body("message", equalTo("The fruit with name Papaya doesn't exist."));
-    }*/
+    }
 }
