@@ -1,4 +1,4 @@
-package edu.pingpong.active.record;
+package edu.pingpong.dao.pattern;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
@@ -38,13 +38,13 @@ public class FruitResourceTest {
 
         fruits.get("fruits").sort(Comparator.comparing(map -> (String) map.get("name")));
 
-        Assertions.assertThat(fruitsList.get(0)).containsValue("Orange");
-        Assertions.assertThat(fruitsList.get(0)).containsEntry("description", "Summer fruit");
+        Assertions.assertThat(fruitsList.get(0)).containsValue("Avocado");
+        Assertions.assertThat(fruitsList.get(0)).containsEntry("description", "Gold");
 
-        Assertions.assertThat(fruitsList.get(1)).containsValue("Strawberry");
-        Assertions.assertThat(fruitsList.get(1)).containsEntry("description", "Winter fruit");
+        Assertions.assertThat(fruitsList.get(1)).containsValue("Orange");
+        Assertions.assertThat(fruitsList.get(1)).containsEntry("description", "Summer fruit");
     }
-
+    /*
     @Test
     public void fruitsDataTransactionTest() {
         given()
@@ -102,5 +102,5 @@ public class FruitResourceTest {
                 .contentType(ContentType.JSON)
                 .statusCode(404)
                 .body("message", equalTo("The fruit with name Papaya doesn't exist."));
-    }
+    }*/
 }

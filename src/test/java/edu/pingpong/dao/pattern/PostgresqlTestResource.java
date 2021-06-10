@@ -1,6 +1,6 @@
-package edu.pingpong.active.record;
+/*package edu.pingpong.dao.pattern;
 
-import edu.pingpong.active.record.PostgresqlTestResource.Initializer;
+import edu.pingpong.dao.pattern.PostgresqlTestResource.Initializer;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -38,4 +38,4 @@ public class PostgresqlTestResource {
             }
         }
     }
-}
+}*/

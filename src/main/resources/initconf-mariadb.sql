@@ -17,7 +17,6 @@ CREATE TABLE fruit
             ON DELETE SET NULL
             ON UPDATE SET NULL
 ) ENGINE = InnoDB;
-
 INSERT INTO
     farmer (name, location)
 VALUES
