@@ -1,10 +1,12 @@
-package edu.pingpong.active.record.resource;
+package edu.pingpong.dao.pattern.resource;
 
 
-import edu.pingpong.active.record.service.FruitService;
-import edu.pingpong.active.record.entity.Fruit;
-import edu.pingpong.active.record.util.FruitsResponse;
-import edu.pingpong.active.record.util.MessagedResponse;
+import edu.pingpong.dao.pattern.entity.Farmer;
+import edu.pingpong.dao.pattern.service.FarmerService;
+import edu.pingpong.dao.pattern.service.FruitService;
+import edu.pingpong.dao.pattern.entity.Fruit;
+import edu.pingpong.dao.pattern.util.FruitsResponse;
+import edu.pingpong.dao.pattern.util.MessagedResponse;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -19,7 +21,10 @@ import java.util.Optional;
 public class FruitResource {
 
     @Inject
-    FruitService service;
+    FruitService fruitService;
+
+    @Inject
+    FarmerService farmerService;
 
     public FruitResource() {
     }
@@ -28,12 +33,12 @@ public class FruitResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response fruitsData() {
-        List<Fruit> data = service.getData();
+        List<Fruit> data = fruitService.getData();
         if (data.isEmpty()) return Response.status(Response.Status.NOT_FOUND)
                 .entity(new MessagedResponse("The fruit storage is without fruits!"))
                 .build();
         return Response.status(Response.Status.OK).entity(
-                new FruitsResponse(service.getData())).build();
+                new FruitsResponse(fruitService.getData())).build();
     }
 
     @POST
@@ -41,7 +46,9 @@ public class FruitResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addData(@Valid Fruit fruit) {
-        service.addFruit(fruit);
+        Optional<Farmer> optionalFarmer = farmerService.getFarmer(fruit.farmer.name);
+        if (optionalFarmer.isEmpty()) farmerService.addFarmerWithoutLocation(fruit.farmer.name);
+        fruitService.addFruit(fruit);
         return Response.status(Response.Status.OK)
                 .entity(new MessagedResponse("Added " + fruit.name + " fruit succesfully."))
                 .build();
@@ -53,11 +60,11 @@ public class FruitResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateData(@PathParam("fruitname") String fruitname, Fruit newFruit) {
-        Optional<Fruit> fruitToUpdate = service.getFruit(fruitname);
+        Optional<Fruit> fruitToUpdate = fruitService.getFruit(fruitname);
         if (fruitToUpdate.isEmpty()) return Response.status(Response.Status.NOT_FOUND)
                 .entity(new MessagedResponse("The fruit with name " + fruitname + " doesn't exist."))
                 .build();
-        service.updateFruit(fruitToUpdate, newFruit);
+        fruitService.updateFruit(fruitToUpdate, newFruit);
         return Response.status(Response.Status.OK)
                 .entity(new MessagedResponse("Updated " + fruitname + " fruit succesfully."))
                 .build();
@@ -68,11 +75,11 @@ public class FruitResource {
     @Path("/{fruitname}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteData(@PathParam("fruitname") String fruitname) {
-        Optional<Fruit> fruit = service.getFruit(fruitname);
+        Optional<Fruit> fruit = fruitService.getFruit(fruitname);
         if (fruit.isEmpty()) return Response.status(Response.Status.NOT_FOUND)
                 .entity(new MessagedResponse("The fruit with name " + fruitname + " doesn't exist."))
                 .build();
-        service.removeFruit(fruitname);
+        fruitService.removeFruit(fruitname);
         return Response.status(Response.Status.OK)
                 .entity(new MessagedResponse("Deleted " + fruitname + " fruit succesfully."))
                 .build();
@@ -82,7 +89,7 @@ public class FruitResource {
     @Path("/{fruitname}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getData(@PathParam("fruitname") String fruitname) {
-        Optional<Fruit> fruit = service.getFruit(fruitname);
+        Optional<Fruit> fruit = fruitService.getFruit(fruitname);
         return fruit.isPresent() ? Response.ok(fruit).build() :
                 Response.status(Response.Status.NOT_FOUND)
                         .entity(new MessagedResponse("The fruit with name " + fruitname + " doesn't exist."))

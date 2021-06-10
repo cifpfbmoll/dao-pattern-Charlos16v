@@ -1,7 +1,7 @@
-package edu.pingpong.active.record.service;
+package edu.pingpong.dao.pattern.service;
 
-import edu.pingpong.active.record.entity.Fruit;
-import edu.pingpong.active.record.repository.FruitRepository;
+import edu.pingpong.dao.pattern.entity.Fruit;
+import edu.pingpong.dao.pattern.repository.FruitRepository;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

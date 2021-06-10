@@ -1,7 +1,6 @@
-package edu.pingpong.active.record.entity;
+package edu.pingpong.dao.pattern.entity;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 import javax.persistence.*;
@@ -9,22 +8,27 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
-@Table(name = "Fruit")
+@Table(name = "fruit")
 @JsonPropertyOrder({"id", "name", "description"})
 public class Fruit extends PanacheEntityBase {
-
+    /*
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    public Integer id;
+    public Integer id;*/
 
-    @Column(name = "name")
+    @Id
+    @Column(name = "name", unique = true)
     @NotBlank
     public String name;
 
     @Column(name = "description")
     @NotEmpty
     public String description;
+
+    @ManyToOne
+    @JoinColumn(name = "farmer_name")
+    public Farmer farmer;
 
     // Required constructor by the JSON serialization layer
     public Fruit() {
@@ -47,7 +51,6 @@ public class Fruit extends PanacheEntityBase {
     @Override
     public String toString() {
         return "Fruit{" +
-                "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 '}';

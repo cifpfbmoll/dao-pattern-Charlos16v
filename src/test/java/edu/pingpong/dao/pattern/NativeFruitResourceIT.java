@@ -1,4 +1,4 @@
-package edu.pingpong.active.record;
+package edu.pingpong.dao.pattern;
 
 import io.quarkus.test.junit.NativeImageTest;
 

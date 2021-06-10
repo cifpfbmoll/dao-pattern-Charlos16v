@@ -1,6 +1,6 @@
-package edu.pingpong.active.record.util;
+package edu.pingpong.dao.pattern.util;
 
-import edu.pingpong.active.record.entity.Fruit;
+import edu.pingpong.dao.pattern.entity.Fruit;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package edu.pingpong.active.record.util;
+package edu.pingpong.dao.pattern.util;
 
 public class MessagedResponse {
 
