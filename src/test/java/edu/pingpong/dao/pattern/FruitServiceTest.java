@@ -1,6 +1,8 @@
 package edu.pingpong.dao.pattern;
 
+import edu.pingpong.dao.pattern.entity.Farmer;
 import edu.pingpong.dao.pattern.entity.Fruit;
+import edu.pingpong.dao.pattern.service.FarmerService;
 import edu.pingpong.dao.pattern.service.FruitService;
 import io.quarkus.test.junit.QuarkusTest;
 import org.assertj.core.api.Assertions;
@@ -14,9 +16,12 @@ import java.util.Optional;
 @Transactional
 public class FruitServiceTest {
 
-    // ./mvnw -Dtest=FruitRepository test
+    // ./mvnw -Dtest=FruitServiceTest test
     @Inject
     FruitService fruitService;
+
+    @Inject
+    FarmerService farmerService;
 
     @Test
     public void checkSetupTest() {
@@ -34,12 +39,15 @@ public class FruitServiceTest {
         Assertions.assertThat(fruitService.getData()).hasSize(1);
         Assertions.assertThat(fruitService.getData().stream().anyMatch(fruit -> fruit.getName().equalsIgnoreCase("Orange"))).isFalse();
 
-        Fruit.persist(new Fruit("Orange", "Summer fruit"));
+        Optional<Farmer> farmerMaster = farmerService.getFarmer("Farmer Master");
+        Fruit.persist(new Fruit("Orange", "Summer fruit", farmerMaster.get()));
     }
 
     @Test
     public void addFruitTest() {
-        fruitService.addFruit(new Fruit("Kiwi", "I am a f*****g kiwi"));
+        Optional<Farmer> farmerAguila = farmerService.getFarmer("Aguila");
+
+        fruitService.addFruit(new Fruit("Kiwi", "I am a f*****g kiwi",farmerAguila.get()));
         Assertions.assertThat(fruitService.getData()).hasSize(3);
         Assertions.assertThat(fruitService.getData().stream().anyMatch(fruit -> fruit.getName().equalsIgnoreCase("kiwi"))).isTrue();
 
@@ -50,17 +58,18 @@ public class FruitServiceTest {
     @Test
     public void updateFruitTest() {
         Optional<Fruit> fruitToUpdate = fruitService.getFruit("Orange");
-        Fruit newFruit = new Fruit("UpdatedOrange", "niceBaby");
+        Optional<Farmer> farmerMaster = farmerService.getFarmer("Farmer Master");
+        Fruit newFruit = new Fruit("Orange", "niceBaby", farmerMaster.get());
 
         fruitService.updateFruit(fruitToUpdate, newFruit);
 
         Assertions.assertThat(fruitService.getData()).hasSize(2);
-        Assertions.assertThat(fruitService.getData().stream().anyMatch(fruit -> fruit.getName().equalsIgnoreCase("UpdatedOrange"))).isTrue();
+        Assertions.assertThat(fruitService.getData().stream().anyMatch(fruit -> fruit.getName().equalsIgnoreCase("Orange"))).isTrue();
         Assertions.assertThat(fruitService.getData().stream().anyMatch(fruit -> fruit.description.equalsIgnoreCase("niceBaby"))).isTrue();
 
         // Manual Rollback
-        fruitService.removeFruit("UpdatedOrange");
-        Fruit.persist(new Fruit("Orange", "Summer fruit"));
+        fruitService.removeFruit("Orange");
+        Fruit.persist(new Fruit("Orange", "Summer fruit", farmerMaster.get()));
     }
 
     @Test

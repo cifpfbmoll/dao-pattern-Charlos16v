@@ -34,9 +34,10 @@ public class Fruit extends PanacheEntityBase {
     public Fruit() {
     }
 
-    public Fruit(String name, String description) {
+    public Fruit(String name, String description, Farmer farmer) {
         this.name = name;
         this.description = description;
+        this.farmer = farmer;
     }
 
     public void setNameAndDescription(String name, String description) {
