@@ -2,9 +2,11 @@ package edu.pingpong.dao.pattern.service;
 
 import edu.pingpong.dao.pattern.entity.Fruit;
 import edu.pingpong.dao.pattern.repository.FruitRepository;
+import edu.pingpong.dao.pattern.util.PageRequest;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.BeanParam;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,8 +20,8 @@ public class FruitService {
     public FruitService() {
     }
 
-    public List<Fruit> getData() {
-        return repository.getAllDataSortedById();
+    public List<Fruit> getData(PageRequest pageRequest) {
+        return repository.getAllDataSortedById(pageRequest);
     }
 
     public Optional<Fruit> getFruit(String name) {

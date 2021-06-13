@@ -9,7 +9,7 @@ import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "fruit")
-@JsonPropertyOrder({"id", "name", "description"})
+//@JsonPropertyOrder({"id", "name", "description"})
 public class Fruit extends PanacheEntityBase {
     /*
     @Id

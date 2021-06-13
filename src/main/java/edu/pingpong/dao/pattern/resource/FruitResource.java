@@ -7,6 +7,8 @@ import edu.pingpong.dao.pattern.service.FruitService;
 import edu.pingpong.dao.pattern.entity.Fruit;
 import edu.pingpong.dao.pattern.util.FruitsResponse;
 import edu.pingpong.dao.pattern.util.MessagedResponse;
+import edu.pingpong.dao.pattern.util.PageRequest;
+import io.quarkus.panache.common.Page;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -32,13 +34,13 @@ public class FruitResource {
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response fruitsData() {
-        List<Fruit> data = fruitService.getData();
+    public Response fruitsData(@BeanParam PageRequest pageRequest) {
+        List<Fruit> data = fruitService.getData(pageRequest);
         if (data.isEmpty()) return Response.status(Response.Status.NOT_FOUND)
                 .entity(new MessagedResponse("The fruit storage is without fruits!"))
                 .build();
         return Response.status(Response.Status.OK).entity(
-                new FruitsResponse(fruitService.getData())).build();
+                new FruitsResponse(data)).build();
     }
 
     @POST
