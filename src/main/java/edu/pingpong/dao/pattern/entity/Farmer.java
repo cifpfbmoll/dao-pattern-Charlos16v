@@ -1,6 +1,8 @@
 package edu.pingpong.dao.pattern.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 import javax.persistence.*;
@@ -8,15 +10,16 @@ import java.util.*;
 
 @Entity
 @Table(name = "farmer")
-public class Farmer extends PanacheEntityBase {
+@JsonIgnoreProperties({"id"})
+public class Farmer extends PanacheEntity {
     /*
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true)
     public Integer id;*/
 
-    @Id
-    @Column(name = "name", unique = true)
+    //@Id
+    @Column(name = "name")
     public String name;
 
     @Column(name = "location")

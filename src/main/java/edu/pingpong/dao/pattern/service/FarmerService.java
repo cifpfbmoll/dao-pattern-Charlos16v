@@ -2,6 +2,7 @@ package edu.pingpong.dao.pattern.service;
 
 import edu.pingpong.dao.pattern.entity.Farmer;
 import edu.pingpong.dao.pattern.repository.FarmerRepository;
+import edu.pingpong.dao.pattern.util.PageRequest;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -17,8 +18,8 @@ public class FarmerService {
 
     public FarmerService() {}
 
-    public List<Farmer> getData() {
-        return repository.getAllDataSortedByName();
+    public List<Farmer> getData(PageRequest pageRequest) {
+        return repository.getAllDataSortedByName(pageRequest);
     }
 
     public Optional<Farmer> getFarmer(String name) {
@@ -30,5 +31,9 @@ public class FarmerService {
     public void addFarmerWithoutLocation(String farmerName) {
         Farmer newFarmer = new Farmer(farmerName, "");
         repository.addFarmer(newFarmer);
+    }
+
+    public void addFarmer(Farmer farmer) {
+        repository.addFarmer(farmer);
     }
 }
